@@ -15,13 +15,18 @@ public class PlayerMover : NetworkBehaviour {
     public float tilt;
     public Boundary boundary;
 
-    // Use this for initialization
-    void Start()
-    {
+    [SyncVar]
+    public string playerID;
 
+    Camera playerCam;
+
+    void Awake()
+    {
+        playerCam = GetComponentInChildren<Camera>();
+        playerCam.gameObject.SetActive(false);
     }
 
-  
+
     void FixedUpdate()
     {
         if (!isLocalPlayer)
@@ -46,8 +51,21 @@ public class PlayerMover : NetworkBehaviour {
 
     }
 
+
+    [Command]
+    void CmdSetPlayerID(string newID)
+    {
+        playerID = newID;
+    }
+
     public override void OnStartLocalPlayer()
     {
+
         GetComponent<MeshRenderer>().material.color = Color.red;
+
+        string myPlayerID = string.Format("Player {0}", netId.Value);
+        CmdSetPlayerID(myPlayerID);
+
+        playerCam.gameObject.SetActive(true);
     }
 }
