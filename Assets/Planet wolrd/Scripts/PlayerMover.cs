@@ -15,15 +15,21 @@ public class PlayerMover : NetworkBehaviour {
     public float tilt;
     public Boundary boundary;
 
-    [SyncVar]
+    [SyncVar(hook = "OnPlayerIDChanged")]
     public string playerID;
 
     Camera playerCam;
+    Transform labelHolder;
 
     void Awake()
     {
         playerCam = GetComponentInChildren<Camera>();
         playerCam.gameObject.SetActive(false);
+        labelHolder = transform.Find("LabelHolder");
+        if (labelHolder == null)
+        {
+            Debug.LogError("LabelHolder null");
+        }
     }
 
 
@@ -67,5 +73,17 @@ public class PlayerMover : NetworkBehaviour {
         CmdSetPlayerID(myPlayerID);
 
         playerCam.gameObject.SetActive(true);
+    }
+
+    public override void OnStartClient()
+    {
+        OnPlayerIDChanged(playerID);
+    }
+
+    void OnPlayerIDChanged(string newValue)
+    {
+        Debug.Log("Player ID : " + newValue);
+        var textMesh = labelHolder.Find("Label").GetComponent<TextMesh>();
+        textMesh.text = newValue;
     }
 }
