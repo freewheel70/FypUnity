@@ -20,16 +20,14 @@ public class PlayerMover : NetworkBehaviour {
 
     Camera playerCam;
     Transform labelHolder;
+	TextMesh PlayerIDLabel;
 
     void Awake()
     {
         playerCam = GetComponentInChildren<Camera>();
         playerCam.gameObject.SetActive(false);
         labelHolder = transform.Find("LabelHolder");
-        if (labelHolder == null)
-        {
-            Debug.LogError("LabelHolder null");
-        }
+		PlayerIDLabel = labelHolder.Find("Label").GetComponent<TextMesh>();
     }
 
 
@@ -53,10 +51,13 @@ public class PlayerMover : NetworkBehaviour {
             Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
         );
 
-        GetComponent<Rigidbody>().rotation = Quaternion.Euler(0.0f, 0.0f, GetComponent<Rigidbody>().velocity.x * -tilt);
-
+        GetComponent<Rigidbody>().rotation = Quaternion.Euler(0.0f, 0.0f, GetComponent<Rigidbody>().velocity.x * -tilt);	
+	
     }
 
+	void LateUpdate(){
+		
+	}
 
     [Command]
     void CmdSetPlayerID(string newID)
@@ -83,7 +84,7 @@ public class PlayerMover : NetworkBehaviour {
     void OnPlayerIDChanged(string newValue)
     {
         Debug.Log("Player ID : " + newValue);
-        var textMesh = labelHolder.Find("Label").GetComponent<TextMesh>();
-        textMesh.text = newValue;
+        
+		PlayerIDLabel.text = newValue;
     }
 }
