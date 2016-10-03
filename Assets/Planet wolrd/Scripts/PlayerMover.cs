@@ -20,14 +20,17 @@ public class PlayerMover : NetworkBehaviour {
 
     Camera playerCam;
     Transform labelHolder;
-	TextMesh PlayerIDLabel;
+	TextMesh playerIDLabel;
+    TextMesh massLabel;
 
     void Awake()
     {
+        Debug.Log("This is " + name + " ; Tag : " + tag + " ; in PlayerMover");
         playerCam = GetComponentInChildren<Camera>();
         playerCam.gameObject.SetActive(false);
         labelHolder = transform.Find("LabelHolder");
-		PlayerIDLabel = labelHolder.Find("Label").GetComponent<TextMesh>();
+		playerIDLabel = labelHolder.Find("IDLabel").GetComponent<TextMesh>();
+        massLabel = labelHolder.Find("MassLabel").GetComponent<TextMesh>();
     }
 
 
@@ -55,9 +58,6 @@ public class PlayerMover : NetworkBehaviour {
 	
     }
 
-	void LateUpdate(){
-		
-	}
 
     [Command]
     void CmdSetPlayerID(string newID)
@@ -85,6 +85,6 @@ public class PlayerMover : NetworkBehaviour {
     {
         Debug.Log("Player ID : " + newValue);
         
-		PlayerIDLabel.text = newValue;
+		playerIDLabel.text = newValue;
     }
 }

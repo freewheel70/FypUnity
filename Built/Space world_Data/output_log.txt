@@ -16,7 +16,7 @@ Platform assembly: E:\Study\Unity\FYPUnity\Built\Space world_Data\Managed\UnityE
 Loading E:\Study\Unity\FYPUnity\Built\Space world_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: E:\Study\Unity\FYPUnity\Built\Space world_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
 Loading E:\Study\Unity\FYPUnity\Built\Space world_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
-- Completed reload, in  0.094 seconds
+- Completed reload, in  0.095 seconds
 Platform assembly: E:\Study\Unity\FYPUnity\Built\Space world_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: E:\Study\Unity\FYPUnity\Built\Space world_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
@@ -24,15 +24,15 @@ desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.023146 ms
+UnloadTime: 1.117196 ms
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 2d58 -> priority: 1 
-  Thread -> id: 2d90 -> priority: 1 
+  Thread -> id: 2c58 -> priority: 1 
+  Thread -> id: 3280 -> priority: 1 
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 7.083810 ms
+UnloadTime: 7.180395 ms
 
-Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 273.
-Total: 0.211344 ms (FindLiveObjects: 0.021332 ms CreateObjectMapping: 0.016986 ms MarkObjects: 0.163545 ms  DeleteObjects: 0.009085 ms)
+Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 274.
+Total: 0.269817 ms (FindLiveObjects: 0.024097 ms CreateObjectMapping: 0.028838 ms MarkObjects: 0.206215 ms  DeleteObjects: 0.010271 ms)
 
 Player ID : 
  
@@ -50,10 +50,6 @@ Player ID : Player 1
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
 Player ID : 
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
@@ -62,7 +58,19 @@ Player ID :
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
+Player enter planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player enter planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player enter planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player enter planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
@@ -70,11 +78,35 @@ Player ID : Player 2
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
+Player exit planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
+Player exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Stop absorb
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Stop absorb
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Stop absorb
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Stop absorb
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
@@ -86,63 +118,11 @@ Boundary exit planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Stop absorb
+Boundary exit planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Stop absorb
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Stop absorb
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Stop absorb
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-asteroid enter planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Player
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Player
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.686970 ms
-
-Unloading 17 unused Assets to reduce memory usage. Loaded Objects now: 284.
-Total: 0.840244 ms (FindLiveObjects: 0.023702 ms CreateObjectMapping: 0.033183 ms MarkObjects: 0.440466 ms  DeleteObjects: 0.342497 ms)
-
-Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.499722 ms
-
-Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 307.
-Total: 0.384766 ms (FindLiveObjects: 0.016196 ms CreateObjectMapping: 0.020146 ms MarkObjects: 0.336571 ms  DeleteObjects: 0.011456 ms)
-
-Player ID : 
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Player ID : Player 3
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-(0.0, 0.0, 0.0, 1.0)
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-(0.7, 0.0, 0.0, 0.7)
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary enter planet scope
+Boundary exit planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
@@ -158,23 +138,23 @@ Stop absorb
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Stop absorb
+asteroid enter planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Player ID : 
+Player enter planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-(0.0, 0.0, 0.0, 1.0)
+Player enter planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
+Player enter planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Player ID : Player 4
+Player enter planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
@@ -186,6 +166,30 @@ asteroid exit planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
+Player exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+asteroid exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player enter planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player enter planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Stop absorb
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
 Stop absorb
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
@@ -194,11 +198,19 @@ Stop absorb
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
+Player exit planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
+Player exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player exit planet scope
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player exit planet scope
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
@@ -218,38 +230,6 @@ Stop absorb
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Boundary enter planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary enter planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary exit planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary exit planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary enter planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary enter planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary exit planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Boundary exit planet scope
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
 Stop absorb
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
@@ -262,13 +242,13 @@ Stop absorb
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-Stop absorb
+asteroid
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
 Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.476020 ms
+UnloadTime: 0.683038 ms
 
-Unloading 17 unused Assets to reduce memory usage. Loaded Objects now: 284.
-Total: 0.718968 ms (FindLiveObjects: 0.018566 ms CreateObjectMapping: 0.020936 ms MarkObjects: 0.384766 ms  DeleteObjects: 0.294302 ms)
+Unloading 17 unused Assets to reduce memory usage. Loaded Objects now: 285.
+Total: 0.833946 ms (FindLiveObjects: 0.018172 ms CreateObjectMapping: 0.031208 ms MarkObjects: 0.432972 ms  DeleteObjects: 0.350802 ms)
 
