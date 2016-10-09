@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class MassViewController : MonoBehaviour {
+public class MassViewController : NetworkBehaviour
+{
 
    
     public int absorbTimeGap = 1;
@@ -10,6 +12,12 @@ public class MassViewController : MonoBehaviour {
     private GameObject player;   
 
     private Queue absorbTickets = Queue.Synchronized(new Queue());
+    private bool isAbsorbing = false;
+
+    private Queue shrinkTickets = Queue.Synchronized(new Queue());
+    private bool isShrinking = false;
+
+    private bool isDead = false;
 
     // Use this for initialization
     void Start () {
@@ -26,23 +34,35 @@ public class MassViewController : MonoBehaviour {
     public void StartAbsorb()
     {
         absorbTickets.Enqueue(new object());
-        StartCoroutine(AbsorbMass());
+        if (!isAbsorbing && absorbTickets.Count<=1)
+        {
+            StartCoroutine(AbsorbMass());
+        }        
     }
 
     IEnumerator AbsorbMass()
     {
-        while (absorbTickets.Count!=0)
+        isAbsorbing = true;
+        while (absorbTickets.Count>0)
         {
+            myMass.grow(10 * absorbTickets.Count);
 
-            Vector3 originScale = player.transform.localScale;
+            Debug.Log(name + " current mass " + myMass.currentMass);
 
-            player.transform.localScale = new Vector3(originScale.x * 1.01f, originScale.y * 1.01f, originScale.z * 1.01f);
+            float newsacle = myMass.currentMass * 1.0f / myMass.initMass;
 
-            myMass.grow(10);
+            player.transform.localScale = new Vector3(newsacle, newsacle, newsacle);
 
+            PlayerAbsorber playerAbsorber = player.GetComponent<PlayerAbsorber>();
+            if (playerAbsorber != null)
+            {
+                playerAbsorber.checkEnemyList();
+            }
+            
             yield return new WaitForSeconds(absorbTimeGap);
         }
 
+        isAbsorbing = false;
         Debug.Log("Stop absorb");
     }
 
@@ -53,12 +73,38 @@ public class MassViewController : MonoBehaviour {
 
     public void StartShrink()
     {
-        myMass.shrink(10);
-        //Todo
+        shrinkTickets.Enqueue(new object());
+        if(!isShrinking && shrinkTickets.Count <= 1 && !isDead)
+        {
+            StartCoroutine(ShrinkMass());
+        }
+                
+    }
+
+    IEnumerator ShrinkMass()
+    {
+        isShrinking = true;
+        while (shrinkTickets.Count > 0 && !isDead)
+        {
+            isDead = (myMass.shrink(10 * shrinkTickets.Count) == 0);
+            if (isDead)
+            {                              
+                break;
+            }
+
+            float newsacle = myMass.currentMass * 1.0f / myMass.initMass;
+
+            player.transform.localScale = new Vector3(newsacle, newsacle, newsacle);
+
+            yield return new WaitForSeconds(absorbTimeGap);
+        }
+
+        isShrinking = false;
+        Debug.Log("Stop shink");
     }
 
     public void StopShrink()
     {
-
+        shrinkTickets.Dequeue();
     }
 }
