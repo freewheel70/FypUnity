@@ -16,7 +16,10 @@ public class PlayerMover : NetworkBehaviour {
     public Boundary boundary;
 
     [SyncVar(hook = "OnPlayerIDChanged")]
-    public string playerID;
+    public string playerName;
+
+    [SyncVar(hook = "OnPlayerColorChanged")]
+    public Color playerColor;
 
     Camera playerCam;
     Transform labelHolder;
@@ -31,6 +34,11 @@ public class PlayerMover : NetworkBehaviour {
         labelHolder = transform.Find("LabelHolder");
 		playerIDLabel = labelHolder.Find("IDLabel").GetComponent<TextMesh>();
         massLabel = labelHolder.Find("MassLabel").GetComponent<TextMesh>();
+    }
+
+    void Start()
+    {
+        this.gameObject.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
     }
 
 
@@ -61,26 +69,14 @@ public class PlayerMover : NetworkBehaviour {
     }
 
 
-    [Command]
-    void CmdSetPlayerID(string newID)
-    {
-        playerID = newID;
-    }
-
     public override void OnStartLocalPlayer()
     {
-
-        GetComponent<MeshRenderer>().material.color = Color.red;
-
-        string myPlayerID = string.Format("Player {0}", netId.Value);
-        CmdSetPlayerID(myPlayerID);
-
         playerCam.gameObject.SetActive(true);
     }
 
     public override void OnStartClient()
     {
-        OnPlayerIDChanged(playerID);
+        OnPlayerIDChanged(playerName);
     }
 
     void OnPlayerIDChanged(string newValue)
@@ -88,5 +84,10 @@ public class PlayerMover : NetworkBehaviour {
         Debug.Log("Player ID : " + newValue);
         
 		playerIDLabel.text = newValue;
+    }
+
+    void OnPlayerColorChanged(Color newColor)
+    {
+        GetComponent<MeshRenderer>().material.color = newColor;
     }
 }
