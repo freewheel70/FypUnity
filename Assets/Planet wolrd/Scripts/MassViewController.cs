@@ -4,9 +4,10 @@ using UnityEngine.Networking;
 
 public class MassViewController : NetworkBehaviour
 {
+    [SyncVar(hook = "updateScale")]
+    public float currentScale = 1.0f;
 
-   
-    public int absorbTimeGap = 1;
+    public float absorbTimeGap = 0.5f;
 
     private Mass myMass;
     private GameObject player;   
@@ -45,13 +46,13 @@ public class MassViewController : NetworkBehaviour
         isAbsorbing = true;
         while (absorbTickets.Count>0)
         {
-            myMass.grow(10 * absorbTickets.Count);
+            myMass.grow(5 * absorbTickets.Count);
 
             Debug.Log(name + " current mass " + myMass.currentMass);
 
             float newsacle = myMass.currentMass * 1.0f / myMass.initMass;
-
-            player.transform.localScale = new Vector3(newsacle, newsacle, newsacle);
+            
+            currentScale = newsacle;
 
             PlayerAbsorber playerAbsorber = player.GetComponent<PlayerAbsorber>();
             if (playerAbsorber != null)
@@ -77,8 +78,7 @@ public class MassViewController : NetworkBehaviour
         if(!isShrinking && shrinkTickets.Count <= 1 && !isDead)
         {
             StartCoroutine(ShrinkMass());
-        }
-                
+        }                
     }
 
     IEnumerator ShrinkMass()
@@ -86,7 +86,7 @@ public class MassViewController : NetworkBehaviour
         isShrinking = true;
         while (shrinkTickets.Count > 0 && !isDead)
         {
-            isDead = (myMass.shrink(10 * shrinkTickets.Count) == 0);
+            isDead = (myMass.shrink(5 * shrinkTickets.Count) == 0);
             if (isDead)
             {                              
                 break;
@@ -94,7 +94,7 @@ public class MassViewController : NetworkBehaviour
 
             float newsacle = myMass.currentMass * 1.0f / myMass.initMass;
 
-            player.transform.localScale = new Vector3(newsacle, newsacle, newsacle);
+            currentScale = newsacle;            
 
             yield return new WaitForSeconds(absorbTimeGap);
         }
@@ -107,4 +107,10 @@ public class MassViewController : NetworkBehaviour
     {
         shrinkTickets.Dequeue();
     }
+
+    public void updateScale(float currentScale)
+    {
+        player.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+    }
+
 }
