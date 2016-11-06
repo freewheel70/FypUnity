@@ -14,6 +14,7 @@ public class PlayerMover : NetworkBehaviour {
     public float speed;
     public float tilt;
     public Boundary boundary;
+    public float smoothing;
 
     [SyncVar(hook = "OnPlayerIDChanged")]
     public string playerName;
@@ -25,6 +26,11 @@ public class PlayerMover : NetworkBehaviour {
     Transform labelHolder;
 	TextMesh playerIDLabel;
     TextMesh massLabel;
+    Rigidbody rb;
+    private Vector2 touchOrigin = -Vector2.one;
+    private Vector2 smoothDirection;
+    private Vector2 direction = Vector2.zero;
+    private bool touched  = false;
 
     void Awake()
     {
@@ -34,6 +40,7 @@ public class PlayerMover : NetworkBehaviour {
         labelHolder = transform.Find("LabelHolder");
 		playerIDLabel = labelHolder.Find("IDLabel").GetComponent<TextMesh>();
         massLabel = labelHolder.Find("MassLabel").GetComponent<TextMesh>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Start()
@@ -47,24 +54,53 @@ public class PlayerMover : NetworkBehaviour {
         if (!isLocalPlayer)
         {
             return;
-        }
+        }      
 
+        Vector3 movement = Vector3.zero;
+
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
-        //float moveHorizontal = Input.acceleration.x;
-        //float moveVertical = Input.acceleration.y;
+        movement = new Vector3(moveHorizontal, 0, moveVertical);
+#else
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        GetComponent<Rigidbody>().velocity = movement * speed;
+        if (Input.touchCount > 0)
+        {
+            Touch myTouch = Input.touches[0];
+            if(myTouch.phase == TouchPhase.Began)
+            {
+                if (!touched)
+                {
+                    touchOrigin = myTouch.position;
+                    touched = true;
+                }
+                
+            }           
+            else if (myTouch.phase == TouchPhase.Moved)
+            {
+                Vector2 touchEnd = myTouch.position;
+                Vector2 directionRaw = touchEnd - touchOrigin;
+                direction = directionRaw.normalized;                                                         
+            }        
+            else if(myTouch.phase == TouchPhase.Ended )
+            {
+                touched = false;
+                direction = Vector2.zero;
+            }
+        }
 
-        GetComponent<Rigidbody>().position = new Vector3
+        smoothDirection = Vector2.MoveTowards(smoothDirection, direction, smoothing);
+        movement = new Vector3(smoothDirection.x, 0.0f, smoothDirection.y);
+#endif
+        rb.velocity = movement * speed;
+        rb.position = new Vector3
         (
-            Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax),
+            Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
             0.0f,
-            Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
+            Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
         );
 
-        GetComponent<Rigidbody>().rotation = Quaternion.Euler(0.0f, 0.0f, GetComponent<Rigidbody>().velocity.x * -tilt);	
+       // rb.rotation = Quaternion.Euler(0.0f, 0.0f, rb.velocity.x * -tilt);	
 	
     }
 
