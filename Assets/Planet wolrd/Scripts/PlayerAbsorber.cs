@@ -9,9 +9,10 @@ public class PlayerAbsorber : NetworkBehaviour
     private Mass myMass;
     private MassViewController massView;
 
-    public bool isAbsorbing = false;
+    //public bool isAbsorbing = false;
     ArrayList enemyList = new ArrayList();
-    
+    public int enemyCount = 0;
+
     void Start () {
         Debug.Log("This is " + name + " ; Tag : " + tag + " ; in PlayerAbsorber");
         player = this.gameObject;
@@ -31,10 +32,11 @@ public class PlayerAbsorber : NetworkBehaviour
 
         if (myMass.currentMass > enemyMass.currentMass)
         {
-            enemyList.Add(enemy);            
+            enemyList.Add(enemy);
+            enemyCount = enemyList.Count;
 
             Debug.Log("PlayerAbsorber will StartAbsorb -- " + other.tag);
-            isAbsorbing = true;
+            //isAbsorbing = true;
             massView.StartAbsorb();
 
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
@@ -44,27 +46,22 @@ public class PlayerAbsorber : NetworkBehaviour
 
 	void OnTriggerExit(Collider other) {
 
-        enemyList.Remove(other.gameObject);
+        GameObject enemy = other.gameObject;
+        Mass enemyMass = enemy.GetComponent<Mass>();
 
-        Debug.Log("PlayerAbsorber OnTriggerExit -- " + other.tag);
-        if (isAbsorbing)
+        if (myMass.currentMass > enemyMass.currentMass)
         {
-
-            Debug.Log("PlayerAbsorber will StopAbsorb -- " + other.tag);
-
-            massView.StopAbsorb();
-            isAbsorbing = false;
-
-            GameObject enemy = other.gameObject;
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
             enemyView.StopShrink();
+            massView.StopAbsorb();
         }
+
+        enemyList.Remove(other.gameObject);
+        enemyCount = enemyList.Count;   
 	}
 
     public void checkEnemyList()
     {
-        //if (!isServer)
-        //   return;
 
         ArrayList deadEnemy = new ArrayList();
         IEnumerator enumerator = enemyList.GetEnumerator();
