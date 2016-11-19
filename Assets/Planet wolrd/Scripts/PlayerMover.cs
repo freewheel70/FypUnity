@@ -16,11 +16,11 @@ public class PlayerMover : NetworkBehaviour {
     public Boundary boundary;
     public float smoothing;
 
-    [SyncVar(hook = "OnPlayerIDChanged")]
-    public string playerName;
+    [SyncVar]
+    public string playerName = "Player";
 
-    [SyncVar(hook = "OnPlayerColorChanged")]
-    public Color playerColor;
+    [SyncVar]
+    public Color playerColor = Color.white;
 
     Camera playerCam;
     Transform labelHolder;
@@ -46,6 +46,10 @@ public class PlayerMover : NetworkBehaviour {
     void Start()
     {
         this.gameObject.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+
+        GetComponent<MeshRenderer>().material.color = playerColor;
+
+        playerIDLabel.text = playerName;
     }
 
 
@@ -110,20 +114,4 @@ public class PlayerMover : NetworkBehaviour {
         playerCam.gameObject.SetActive(true);
     }
 
-    public override void OnStartClient()
-    {
-        OnPlayerIDChanged(playerName);
-    }
-
-    void OnPlayerIDChanged(string newValue)
-    {
-        Debug.Log("Player ID : " + newValue);
-        
-		playerIDLabel.text = newValue;
-    }
-
-    void OnPlayerColorChanged(Color newColor)
-    {
-        GetComponent<MeshRenderer>().material.color = newColor;
-    }
 }
