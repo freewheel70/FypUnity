@@ -9,6 +9,10 @@ Main custom codes are contained in [Assets](https://github.com/freewheel70/FypUn
 The built programs (like exe file or apk file) put in [Built](https://github.com/freewheel70/FypUnity/tree/master/Built) directory
 
 TODO:
- - Create control panel for mobile 
- - Keep lost player inside room to watch the rest of the game
- - Host player should also be dead when mass is 0
+ - Create control panel for mobile [done]
+ - A Flag indicating other planet mass (lager or smaller)
+ - Change the view of player (height of camera)
+ - Planet will reborn after death
+ - Add different hazards and special features 
+ - Attacking hazard will hit and damage planet 
+ - Losing mass to move faster
