@@ -10,9 +10,13 @@ The built programs (like exe file or apk file) put in [Built](https://github.com
 
 TODO:
  - Create control panel for mobile [done]
+ - Bug: client disappear unexpected (network issue?)
+ - Bug: Small mass hazard could not be absorbed
+ - Losing mass to move faster
  - A Flag indicating other planet mass (lager or smaller)
  - Change the view of player (height of camera)
  - Planet will reborn after death
  - Add different hazards and special features 
  - Attacking hazard will hit and damage planet 
- - Losing mass to move faster
+ 
+
