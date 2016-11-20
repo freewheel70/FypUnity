@@ -27,6 +27,7 @@ public class PlayerMover : NetworkBehaviour {
 	TextMesh playerIDLabel;
     TextMesh massLabel;
     Rigidbody rb;
+    public Transform flame;
     private Vector2 touchOrigin = -Vector2.one;
     private Vector2 smoothDirection;
     private Vector2 direction = Vector2.zero;
@@ -36,7 +37,7 @@ public class PlayerMover : NetworkBehaviour {
     {
         Debug.Log("This is " + name + " ; Tag : " + tag + " ; in PlayerMover");
         playerCam = GetComponentInChildren<Camera>();
-        playerCam.gameObject.SetActive(false);
+        playerCam.gameObject.SetActive(false);        
         labelHolder = transform.Find("LabelHolder");
 		playerIDLabel = labelHolder.Find("IDLabel").GetComponent<TextMesh>();
         massLabel = labelHolder.Find("MassLabel").GetComponent<TextMesh>();
@@ -96,6 +97,10 @@ public class PlayerMover : NetworkBehaviour {
         smoothDirection = Vector2.MoveTowards(smoothDirection, direction, smoothing);
         movement = new Vector3(smoothDirection.x, 0.0f, smoothDirection.y);
 #endif
+        //flame.localPosition = movement.normalized;
+        //Debug.Log("flame.position : " + flame.position);
+
+        //flame.rotation = movement;
         rb.velocity = movement * speed;
         rb.position = new Vector3
         (
@@ -104,14 +109,33 @@ public class PlayerMover : NetworkBehaviour {
             Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
         );
 
-       // rb.rotation = Quaternion.Euler(0.0f, 0.0f, rb.velocity.x * -tilt);	
-	
+        float rotateY = 0.0f;
+        if(movement.x==0.0f && movement.z == 0.0f)
+        {
+            rotateY = 0.0f;
+        }else if (movement.x == 0.0f){
+            rotateY = (movement.z > 0) ? 0.0f : 180.0f;
+        }else if(movement.z == 0.0f)
+        {
+            rotateY = (movement.x > 0) ? 90.0f : -90.0f;
+        }
+        else
+        {
+            //rotateY = Mathf.Atan2(movement.x, movement.z) * 180; 
+            rotateY = Mathf.Atan2(movement.z, -movement.x) * Mathf.Rad2Deg - 90;
+            if (rotateY < 0) rotateY += 360;
+        }
+
+        Debug.Log(movement.ToString() + " rotateY " + rotateY);
+
+        rb.rotation = Quaternion.Euler(0.0f, rotateY, 0.0f );
+        //* -tilt
     }
 
 
     public override void OnStartLocalPlayer()
     {
-        playerCam.gameObject.SetActive(true);
+        playerCam.gameObject.SetActive(true);       
     }
 
 }
