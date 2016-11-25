@@ -68,10 +68,9 @@ public class PlayerAbsorber : NetworkBehaviour
         while(enumerator.MoveNext())
         {
             GameObject enemy =(GameObject)enumerator.Current;
-            if (enemy.GetComponent<Mass>().currentMass == 0)
+            if (enemy!=null && enemy.GetComponent<Mass>().currentMass == 0)
             {                
-                deadEnemy.Add(enemy);
-               
+                deadEnemy.Add(enemy);               
             }
         }
         IEnumerator deadEnumerator = deadEnemy.GetEnumerator();

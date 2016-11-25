@@ -22,8 +22,8 @@ public class PlayerMover : NetworkBehaviour {
     [SyncVar]
     public Color playerColor = Color.white;
 
-    [SyncVar(hook = "UpdateRoate")]
-    public float rotateYVal = 0.0f;
+    [SyncVar]
+    public float rotateYVal = 0.01f;
 
     Camera playerCam;
     Transform labelHolder;
@@ -59,17 +59,15 @@ public class PlayerMover : NetworkBehaviour {
 
     void FixedUpdate()
     {
-        if (!isLocalPlayer)
+        if (isLocalPlayer)
         {
-            return;
-        }
 
-        Vector3 movement = Vector3.zero;
+            Vector3 movement = Vector3.zero;
 
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-        movement = new Vector3(moveHorizontal, 0, moveVertical);
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            float moveVertical = Input.GetAxis("Vertical");
+            movement = new Vector3(moveHorizontal, 0, moveVertical);
 #else
 
         if (Input.touchCount > 0)
@@ -100,51 +98,62 @@ public class PlayerMover : NetworkBehaviour {
         smoothDirection = Vector2.MoveTowards(smoothDirection, direction, smoothing);
         movement = new Vector3(smoothDirection.x, 0.0f, smoothDirection.y);
 #endif
-        //flame.localPosition = movement.normalized;
-        //Debug.Log("flame.position : " + flame.position);
+            //flame.localPosition = movement.normalized;
+            //Debug.Log("flame.position : " + flame.position);
 
-        //flame.rotation = movement;
-        rb.velocity = movement * speed;
-        rb.position = new Vector3
-        (
-            Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
-            0.0f,
-            Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
-        );
+            //flame.rotation = movement;
+            rb.velocity = movement * speed;
+            rb.position = new Vector3
+            (
+                Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
+                0.0f,
+                Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
+            );
 
-        float rotateY = 0.0f;
-        if (movement.x == 0.0f && movement.z == 0.0f)
+            float rotateY = 0.0f;
+            if (movement.x == 0.0f && movement.z == 0.0f)
+            {
+                rotateY = 0.01f;
+                //flame.transform.localPosition = new Vector3(0, 0, 0);
+                flame.SetActive(false);
+            }
+            else
+            {
+                flame.SetActive(true);
+                //flame.transform.localPosition = new Vector3(0, 0, -0.7f);
+                if (movement.x == 0.0f)
+                {
+                    rotateY = (movement.z > 0) ? 0.0f : 180.0f;
+                }
+                else if (movement.z == 0.0f)
+                {
+                    rotateY = (movement.x > 0) ? 90.0f : -90.0f;
+                }
+                else
+                {
+                    rotateY = Mathf.Atan2(movement.z, -movement.x) * Mathf.Rad2Deg - 90;
+                    if (rotateY < 0) rotateY += 360;
+                }
+            }
+            //Debug.Log(movement.ToString() + " rotateY " + rotateY);
+
+            //rb.transform.localRotation = Quaternion.Euler(0.0f, rotateY, 0.0f);
+            //rb.rotation = Quaternion.Euler(0.0f, rotateY, 0.0f);      
+
+            this.rotateYVal = rotateY;
+            CmdUpdateRoateVal(rotateY);
+        }
+
+        rb.rotation = Quaternion.Euler(0.0f, rotateYVal, 0.0f);
+        if (rotateYVal == 0.01f)
         {
-            rotateY = 0.0f;
-            //flame.transform.localPosition = new Vector3(0, 0, 0);
             flame.SetActive(false);
         }
         else
         {
             flame.SetActive(true);
-            //flame.transform.localPosition = new Vector3(0, 0, -0.7f);
-            if (movement.x == 0.0f)
-            {
-                rotateY = (movement.z > 0) ? 0.0f : 180.0f;
-            }
-            else if (movement.z == 0.0f)
-            {
-                rotateY = (movement.x > 0) ? 90.0f : -90.0f;
-            }
-            else
-            {
-                rotateY = Mathf.Atan2(movement.z, -movement.x) * Mathf.Rad2Deg - 90;
-                if (rotateY < 0) rotateY += 360;
-            }
         }
-        //Debug.Log(movement.ToString() + " rotateY " + rotateY);
 
-        //rb.rotation = Quaternion.Euler(0.0f, rotateY, 0.0f );   
-        //rb.transform.localRotation = Quaternion.Euler(0.0f, rotateY, 0.0f);
-        //rb.rotation = Quaternion.Euler(0.0f, rotateY, 0.0f);
-        //CmdUpdateRoatation(rotateY);
-
-        CmdUpdateRoateVal(rotateY);
     }
 
     [Command]
@@ -153,18 +162,6 @@ public class PlayerMover : NetworkBehaviour {
         this.rotateYVal = rotateY;
     }
 
-    public void UpdateRoate(float rotateYVal)
-    {
-        rb.rotation = Quaternion.Euler(0.0f, rotateYVal, 0.0f);
-        if (rotateYVal == 0.0f)
-        {
-            flame.SetActive(false);
-        }
-        else
-        {
-            flame.SetActive(true);
-        }
-    }
 
     public override void OnStartLocalPlayer()
     {
