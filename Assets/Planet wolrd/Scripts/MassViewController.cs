@@ -9,6 +9,8 @@ public class MassViewController : NetworkBehaviour
 
     public float absorbTimeGap = 0.5f;
 
+    public GameObject explosion;
+
     private Mass myMass;
     private GameObject player;   
 
@@ -88,7 +90,9 @@ public class MassViewController : NetworkBehaviour
         {
             isDead = (myMass.shrink(5 * shrinkTickets.Count) == 0);
             if (isDead)
-            {                              
+            {                
+                GameObject explo = (GameObject)Instantiate(explosion, this.transform.position, Quaternion.identity);
+                NetworkServer.Spawn(explo);
                 break;
             }
 
