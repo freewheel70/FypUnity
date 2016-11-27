@@ -11,6 +11,13 @@ public class Mass : NetworkBehaviour {
 
     public int initMass;
 
+    public void Reset()
+    {
+        if (!isServer)
+            return;
+        currentMass = 100;
+    }
+
     // Use this for initialization
     void Start()
     {       

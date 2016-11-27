@@ -22,6 +22,18 @@ public class MassViewController : NetworkBehaviour
 
     private bool isDead = false;
 
+    public void Reset()
+    {
+        currentScale = 1.0f;
+        isAbsorbing = false;
+        isShrinking = false;
+        isDead = false;
+        absorbTickets.Clear();
+        shrinkTickets.Clear();
+
+        myMass.Reset();
+    }
+
     // Use this for initialization
     void Start () {
         Debug.Log("This is " + name + " ; Tag : " + tag + " ; in MassViewController");
@@ -71,7 +83,8 @@ public class MassViewController : NetworkBehaviour
 
     public void StopAbsorb()
     {
-        absorbTickets.Dequeue();
+        if(absorbTickets.Count>0)
+            absorbTickets.Dequeue();
     }
 
     public void StartShrink()
@@ -109,7 +122,8 @@ public class MassViewController : NetworkBehaviour
 
     public void StopShrink()
     {
-        shrinkTickets.Dequeue();
+        if(shrinkTickets.Count>0)
+            shrinkTickets.Dequeue();
     }
 
     public void updateScale(float currentScale)

@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 public class PlayerAbsorber : NetworkBehaviour
 {
 
-	private GameObject player;
+    private GameObject player;
     private Mass myMass;
     private MassViewController massView;
 
@@ -13,22 +13,28 @@ public class PlayerAbsorber : NetworkBehaviour
     ArrayList enemyList = new ArrayList();
     public int enemyCount = 0;
 
-    void Start () {
+    void Start()
+    {
         Debug.Log("This is " + name + " ; Tag : " + tag + " ; in PlayerAbsorber");
         player = this.gameObject;
         myMass = player.GetComponent<Mass>();
         massView = player.GetComponent<MassViewController>();
     }
 
-	void OnTriggerEnter(Collider other) {
-		if (other.tag == "Boundary"){
-			return;
-		}
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Boundary")
+        {
+            return;
+        }
 
         Debug.Log("PlayerAbsorber OnTriggerEnter -- " + other.tag);
 
         GameObject enemy = other.gameObject;
-        Mass enemyMass = enemy.GetComponent<Mass>();        
+        Mass enemyMass = enemy.GetComponent<Mass>();
+
+        if (enemy == null || enemyMass == null)
+            return;
 
         if (myMass.currentMass > enemyMass.currentMass)
         {
@@ -41,10 +47,11 @@ public class PlayerAbsorber : NetworkBehaviour
 
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
             enemyView.StartShrink();
-        }		
-	}
+        }
+    }
 
-	void OnTriggerExit(Collider other) {
+    void OnTriggerExit(Collider other)
+    {
 
         GameObject enemy = other.gameObject;
         Mass enemyMass = enemy.GetComponent<Mass>();
@@ -57,20 +64,20 @@ public class PlayerAbsorber : NetworkBehaviour
         }
 
         enemyList.Remove(other.gameObject);
-        enemyCount = enemyList.Count;   
-	}
+        enemyCount = enemyList.Count;
+    }
 
     public void checkEnemyList()
     {
 
         ArrayList deadEnemy = new ArrayList();
         IEnumerator enumerator = enemyList.GetEnumerator();
-        while(enumerator.MoveNext())
+        while (enumerator.MoveNext())
         {
-            GameObject enemy =(GameObject)enumerator.Current;
-            if (enemy!=null && enemy.GetComponent<Mass>().currentMass == 0)
-            {                
-                deadEnemy.Add(enemy);               
+            GameObject enemy = (GameObject)enumerator.Current;
+            if (enemy != null && enemy.GetComponent<Mass>().currentMass == 0)
+            {
+                deadEnemy.Add(enemy);
             }
         }
         IEnumerator deadEnumerator = deadEnemy.GetEnumerator();
@@ -78,9 +85,38 @@ public class PlayerAbsorber : NetworkBehaviour
         {
             GameObject enemy = (GameObject)deadEnumerator.Current;
             enemyList.Remove(enemy);
+            if (enemy == null)
+                return;
+
             massView.StopAbsorb();
-            Destroy(enemy);
+            //Destroy(enemy);
+            //enemy.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+            CmdDestory(enemy);
         }
+    }
+
+    [Command]
+    public void CmdDestory(GameObject gameObj)
+    {
+        if (gameObj == null)
+            return;
+
+        if (gameObj.tag == "Player")
+        {
+            // gameObj.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+            RpcRespawn(gameObj);
+            gameObj.GetComponent<MassViewController>().Reset();
+        }
+        else
+        {
+            Destroy(gameObj);
+        }
+    }
+
+    [ClientRpc]
+    void RpcRespawn(GameObject gameObj)
+    {
+        gameObj.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
     }
 
 }
