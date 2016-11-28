@@ -15,7 +15,7 @@ TODO:
  - Losing mass to move faster
  - A Flag indicating other planet mass (lager or smaller)
  - Change the view of player (height of camera)
- - Planet will reborn after death
+ - Planet will reborn after death [done with little bug]
  - Add different hazards and special features 
  - Attacking hazard will hit and damage planet 
  

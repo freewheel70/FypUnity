@@ -111,7 +111,10 @@ public class MassViewController : NetworkBehaviour
 
             float newsacle = myMass.currentMass * 1.0f / myMass.initMass;
 
-            currentScale = newsacle;            
+            currentScale = newsacle;
+
+            Vector3 oldSpeed = player.GetComponent<Rigidbody>().velocity;
+            player.GetComponent<Rigidbody>().velocity = new Vector3(oldSpeed.x / 2, oldSpeed.y / 2, oldSpeed.z / 2);
 
             yield return new WaitForSeconds(absorbTimeGap);
         }
@@ -128,7 +131,7 @@ public class MassViewController : NetworkBehaviour
 
     public void updateScale(float currentScale)
     {
-        player.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+        player.transform.localScale = new Vector3(currentScale, currentScale, currentScale);        
     }
 
 }

@@ -115,8 +115,8 @@ public class PlayerAbsorber : NetworkBehaviour
 
     [ClientRpc]
     void RpcRespawn(GameObject gameObj)
-    {
-        gameObj.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+    {        
+        gameObj.GetComponent<PlayerMover>().Respawn();            
     }
 
 }

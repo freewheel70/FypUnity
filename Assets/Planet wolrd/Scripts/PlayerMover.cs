@@ -47,12 +47,21 @@ public class PlayerMover : NetworkBehaviour {
         rb = GetComponent<Rigidbody>();
     }
 
+    public void Respawn()
+    {
+        if (isLocalPlayer)
+        {
+            this.gameObject.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+        }
+    }
+
     void Start()
     {
         this.gameObject.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
 
-        GetComponent<MeshRenderer>().material.color = playerColor;
-
+        //GetComponent<MeshRenderer>().material.color = playerColor;
+        playerIDLabel.color = playerColor;
+        massLabel.color = playerColor;
         playerIDLabel.text = playerName;
     }
 
