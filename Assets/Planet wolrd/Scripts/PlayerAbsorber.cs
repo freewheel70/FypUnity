@@ -47,6 +47,9 @@ public class PlayerAbsorber : NetworkBehaviour
 
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
             enemyView.StartShrink();
+
+            if (isLocalPlayer)
+                Handheld.Vibrate();
         }
     }
 

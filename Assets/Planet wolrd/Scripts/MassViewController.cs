@@ -21,6 +21,8 @@ public class MassViewController : NetworkBehaviour
     private bool isShrinking = false;
 
     private bool isDead = false;
+    private AudioSource[] audios;
+
 
     public void Reset()
     {
@@ -38,7 +40,8 @@ public class MassViewController : NetworkBehaviour
     void Start () {
         Debug.Log("This is " + name + " ; Tag : " + tag + " ; in MassViewController");
         player = this.gameObject;
-        myMass = player.GetComponent<Mass>();        
+        myMass = player.GetComponent<Mass>();
+        audios = GetComponents<AudioSource>();
     }
 	
 	// Update is called once per frame
@@ -89,6 +92,11 @@ public class MassViewController : NetworkBehaviour
 
     public void StartShrink()
     {
+        Debug.Log("tag " + this.gameObject.tag + " ;isLocalPlayer " + isLocalPlayer);
+        if (this.gameObject.tag == "Player" && isLocalPlayer)
+        {
+            audios[1].Play();
+        }
         shrinkTickets.Enqueue(new object());
         if(!isShrinking && shrinkTickets.Count <= 1 && !isDead)
         {
@@ -106,6 +114,7 @@ public class MassViewController : NetworkBehaviour
             {                
                 GameObject explo = (GameObject)Instantiate(explosion, this.transform.position, Quaternion.identity);
                 NetworkServer.Spawn(explo);
+                audios[0].Play();
                 break;
             }
 

@@ -35,6 +35,7 @@ public class PlayerMover : NetworkBehaviour {
     private Vector2 smoothDirection;
     private Vector2 direction = Vector2.zero;
     private bool touched  = false;
+    private Mass myMass;
 
     void Awake()
     {
@@ -45,6 +46,7 @@ public class PlayerMover : NetworkBehaviour {
 		playerIDLabel = labelHolder.Find("IDLabel").GetComponent<TextMesh>();
         massLabel = labelHolder.Find("MassLabel").GetComponent<TextMesh>();
         rb = GetComponent<Rigidbody>();
+        myMass = this.gameObject.GetComponent<Mass>();
     }
 
     public void Respawn()
@@ -111,7 +113,11 @@ public class PlayerMover : NetworkBehaviour {
             //Debug.Log("flame.position : " + flame.position);
 
             //flame.rotation = movement;
-            rb.velocity = movement * speed;
+            float massFactor = myMass.currentMass / myMass.initMass ;
+            massFactor = 1 - (massFactor - 1.0f)  * 0.1f;
+          
+            float currentSpeed = speed * (massFactor < 0.4f ? 0.4f : massFactor);
+            rb.velocity = movement * currentSpeed;
             rb.position = new Vector3
             (
                 Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
