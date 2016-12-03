@@ -12,13 +12,14 @@ public class PlayerAbsorber : NetworkBehaviour
     //public bool isAbsorbing = false;
     ArrayList enemyList = new ArrayList();
     public int enemyCount = 0;
+    private AudioSource[] audios;
 
     void Start()
-    {
-        Debug.Log("This is " + name + " ; Tag : " + tag + " ; in PlayerAbsorber");
+    {        
         player = this.gameObject;
         myMass = player.GetComponent<Mass>();
         massView = player.GetComponent<MassViewController>();
+        audios = GetComponents<AudioSource>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -26,9 +27,7 @@ public class PlayerAbsorber : NetworkBehaviour
         if (other.tag == "Boundary")
         {
             return;
-        }
-
-        Debug.Log("PlayerAbsorber OnTriggerEnter -- " + other.tag);
+        }     
 
         GameObject enemy = other.gameObject;
         Mass enemyMass = enemy.GetComponent<Mass>();
@@ -41,8 +40,6 @@ public class PlayerAbsorber : NetworkBehaviour
             enemyList.Add(enemy);
             enemyCount = enemyList.Count;
 
-            Debug.Log("PlayerAbsorber will StartAbsorb -- " + other.tag);
-            //isAbsorbing = true;
             massView.StartAbsorb();
 
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
@@ -50,7 +47,21 @@ public class PlayerAbsorber : NetworkBehaviour
 
             if (isLocalPlayer)
                 Handheld.Vibrate();
+
+            if (enemy.tag=="Player")
+            {
+                RpcPlayWarning();
+            }
+                
         }
+    }
+
+    [ClientRpc]
+    public void RpcPlayWarning()
+    {
+        //Debug.Log("IsAbsorbing " + massView.IsAbsorbing());        
+        //if(!massView.IsAbsorbing())      
+            audios[1].Play();
     }
 
     void OnTriggerExit(Collider other)
@@ -91,9 +102,7 @@ public class PlayerAbsorber : NetworkBehaviour
             if (enemy == null)
                 return;
 
-            massView.StopAbsorb();
-            //Destroy(enemy);
-            //enemy.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+            massView.StopAbsorb();            
             CmdDestory(enemy);
         }
     }

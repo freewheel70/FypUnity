@@ -13,7 +13,7 @@ public class PlayerStaticComponentController : MonoBehaviour {
 		player = this.transform.parent.gameObject;
 		offset = transform.position - player.transform.position;        
 		rotation = transform.rotation;
-		Debug.Log(rotation);        
+
 	}
 
 	// Update is called once per frame

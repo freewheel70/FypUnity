@@ -25,8 +25,7 @@ public class Mass : NetworkBehaviour {
       
         massLabel = transform.Find("LabelHolder").Find("MassLabel").GetComponent<TextMesh>();
 
-        updateMassLabel(currentMass);
-        Debug.Log("This is " + name + " ; Tag : " + tag + " ; currentMass : "+ currentMass);
+        updateMassLabel(currentMass);        
     }
 
     public void grow(int amount)
@@ -59,7 +58,7 @@ public class Mass : NetworkBehaviour {
     {
         if (massLabel == null)
         {
-            Debug.Log("This is " + name + "massLabel == null");
+
         }
         else
         {

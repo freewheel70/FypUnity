@@ -38,7 +38,6 @@ public class MassViewController : NetworkBehaviour
 
     // Use this for initialization
     void Start () {
-        Debug.Log("This is " + name + " ; Tag : " + tag + " ; in MassViewController");
         player = this.gameObject;
         myMass = player.GetComponent<Mass>();
         audios = GetComponents<AudioSource>();
@@ -51,11 +50,17 @@ public class MassViewController : NetworkBehaviour
 
     public void StartAbsorb()
     {
+    
         absorbTickets.Enqueue(new object());
-        if (!isAbsorbing && absorbTickets.Count<=1)
+        if (!isAbsorbing && absorbTickets.Count <= 1)
         {
             StartCoroutine(AbsorbMass());
-        }        
+        }                        
+    }
+
+    public bool IsAbsorbing()
+    {
+        return (absorbTickets.Count > 0);
     }
 
     IEnumerator AbsorbMass()
@@ -64,8 +69,6 @@ public class MassViewController : NetworkBehaviour
         while (absorbTickets.Count>0)
         {
             myMass.grow(5 * absorbTickets.Count);
-
-            Debug.Log(name + " current mass " + myMass.currentMass);
 
             float newsacle = myMass.currentMass * 1.0f / myMass.initMass;
             
@@ -90,18 +93,33 @@ public class MassViewController : NetworkBehaviour
             absorbTickets.Dequeue();
     }
 
+    public bool IsShrinking()
+    {
+        return (shrinkTickets.Count > 0);
+    }
+
     public void StartShrink()
     {
-        Debug.Log("tag " + this.gameObject.tag + " ;isLocalPlayer " + isLocalPlayer);
-        if (this.gameObject.tag == "Player" && isLocalPlayer)
-        {
-            audios[1].Play();
-        }
+  
+        //if (this.gameObject.tag == "Player")
+        //{
+        //    RpcPlayWarning(netId);
+        //}
         shrinkTickets.Enqueue(new object());
-        if(!isShrinking && shrinkTickets.Count <= 1 && !isDead)
+        if (!isShrinking && shrinkTickets.Count <= 1 && !isDead)
         {
             StartCoroutine(ShrinkMass());
-        }                
+        }        
+                        
+    }
+
+
+
+    [ClientRpc]
+    public void RpcPlayExplosion(NetworkInstanceId id)
+    {
+        if (id.Equals(netId))
+            audios[0].Play();
     }
 
     IEnumerator ShrinkMass()
@@ -114,7 +132,7 @@ public class MassViewController : NetworkBehaviour
             {                
                 GameObject explo = (GameObject)Instantiate(explosion, this.transform.position, Quaternion.identity);
                 NetworkServer.Spawn(explo);
-                audios[0].Play();
+                RpcPlayExplosion(netId);
                 break;
             }
 
