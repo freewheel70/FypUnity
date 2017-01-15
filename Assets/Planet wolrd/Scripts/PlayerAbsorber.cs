@@ -45,8 +45,10 @@ public class PlayerAbsorber : NetworkBehaviour
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
             enemyView.StartShrink();
 
+#if UNITY_ANDROID
             if (isLocalPlayer)
                 Handheld.Vibrate();
+#endif 
 
             if (enemy.tag=="Player")
             {
