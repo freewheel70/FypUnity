@@ -35,6 +35,7 @@ public class PlayerMover : NetworkBehaviour {
     private Vector2 smoothDirection;
     private Vector2 direction = Vector2.zero;
     private bool touched  = false;
+   
     private Mass myMass;
 
     void Awake()
@@ -71,7 +72,7 @@ public class PlayerMover : NetworkBehaviour {
     void FixedUpdate()
     {
         if (isLocalPlayer)
-        {
+        {			
             updateCurrentMovement();
         }
 
@@ -95,7 +96,7 @@ public class PlayerMover : NetworkBehaviour {
         massFactor = 1.0f - (massFactor - 1.0f) * 0.1f;
 
         float currentSpeed = speed * (massFactor < 0.4f ? 0.4f : massFactor);
-        Debug.Log("myMass.currentMass" + myMass.currentMass + "   massFactor " + massFactor + " currentSpeed " + currentSpeed);
+       // Debug.Log("myMass.currentMass" + myMass.currentMass + "   massFactor " + massFactor + " currentSpeed " + currentSpeed);
         rb.velocity = movement * currentSpeed;
 
         rb.position = new Vector3
@@ -119,7 +120,7 @@ public class PlayerMover : NetworkBehaviour {
       movement = new Vector3(moveHorizontal, 0, moveVertical);
 #else
 
-      if (Input.touchCount > 0)
+      if (Input.touchCount == 1)
       {
           Touch myTouch = Input.touches[0];
           if(myTouch.phase == TouchPhase.Began)
@@ -189,7 +190,12 @@ public class PlayerMover : NetworkBehaviour {
 
     public override void OnStartLocalPlayer()
     {
-        playerCam.gameObject.SetActive(true);
+        playerCam.gameObject.SetActive(true);      
+        
     }
+
+	
+
+
 
 }

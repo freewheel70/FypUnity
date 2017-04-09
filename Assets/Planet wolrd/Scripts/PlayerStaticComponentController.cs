@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class PlayerStaticComponentController : MonoBehaviour {
-	private GameObject player;
+	protected GameObject player;
 
-	private Vector3 offset;    
-    private Quaternion rotation;
+    protected Vector3 offset;
+    protected Quaternion rotation;
 
 	// Use this for initialization
 	void Start()
@@ -13,7 +13,6 @@ public class PlayerStaticComponentController : MonoBehaviour {
 		player = this.transform.parent.gameObject;
 		offset = transform.position - player.transform.position;        
 		rotation = transform.rotation;
-
 	}
 
 	// Update is called once per frame
