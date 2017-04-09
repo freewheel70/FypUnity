@@ -5,8 +5,7 @@ using UnityEngine.Networking;
 
 public class NetworkLobbyHook : LobbyHook {
 
-    public override void OnLobbyServerSceneLoadedForPlayer(NetworkManager manager, GameObject lobbyPlayer, GameObject gamePlayer)
-    {
+    public override void OnLobbyServerSceneLoadedForPlayer(NetworkManager manager, GameObject lobbyPlayer, GameObject gamePlayer){
         LobbyPlayer lobby = lobbyPlayer.GetComponent<LobbyPlayer>();
         PlayerMover localPlayer = gamePlayer.GetComponent<PlayerMover>();
 

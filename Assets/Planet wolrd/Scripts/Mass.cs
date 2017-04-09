@@ -2,8 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class Mass : NetworkBehaviour
-{
+public class Mass : NetworkBehaviour{
 
     TextMesh massLabel;
 
@@ -12,16 +11,15 @@ public class Mass : NetworkBehaviour
 
     public int initMass;
 
-    public void Reset()
-    {
-        if (!isServer)
+    public void Reset(){
+        if (!isServer) { 
             return;
+        }
         currentMass = 100;
     }
 
     // Use this for initialization
-    void Start()
-    {
+    void Start(){
         currentMass = initMass;
 
         massLabel = transform.Find("LabelHolder").Find("MassLabel").GetComponent<TextMesh>();
@@ -29,8 +27,7 @@ public class Mass : NetworkBehaviour
         updateMassLabel(currentMass);
     }
 
-    public void grow(int amount)
-    {
+    public void grow(int amount){
         if (!isServer)
             return;
         currentMass += amount;
@@ -40,14 +37,12 @@ public class Mass : NetworkBehaviour
     //-1 ignored because not server
     // 0 current mass is 0, the gameobject is dead
     // 1 current mass is greater than 0, the gameobject is still alive
-    public int shrink(int amount)
-    {
+    public int shrink(int amount){
         if (!isServer)
             return -1;
 
         currentMass -= amount;
-        if (currentMass <= 0)
-        {
+        if (currentMass <= 0){
             currentMass = 0;
             Debug.Log("Death!");
             return 0;
@@ -55,14 +50,10 @@ public class Mass : NetworkBehaviour
         return 1;
     }
 
-    private void updateMassLabel(int currentMass)
-    {
-        if (massLabel == null)
-        {
+    private void updateMassLabel(int currentMass){
+        if (massLabel == null){
 
-        }
-        else
-        {
+        }else{
             massLabel.text = " " + currentMass;            
         }
 

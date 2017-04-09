@@ -8,16 +8,14 @@ public class PlayerStaticComponentController : MonoBehaviour {
     protected Quaternion rotation;
 
 	// Use this for initialization
-	void Start()
-	{
+	void Start(){
 		player = this.transform.parent.gameObject;
 		offset = transform.position - player.transform.position;        
 		rotation = transform.rotation;
 	}
 
 	// Update is called once per frame
-	void LateUpdate()
-	{
+	void LateUpdate(){
 		transform.position = player.transform.position + offset;
 		transform.rotation = rotation;        
 	}

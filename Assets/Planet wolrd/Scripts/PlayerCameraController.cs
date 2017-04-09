@@ -1,46 +1,50 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerCameraController : MonoBehaviour
-{
+public class PlayerCameraController : MonoBehaviour{
 
-    private bool startMoveCamera = false;
-    private float originTouchesDiff = 0;
+    private bool startMoveCamera = false;  
 
     private float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
-    private float orthoZoomSpeed = 0.5f;        // The rate of change of the orthographic size in orthographic mode.
+    private float orthoZoomSpeed = 0.3f;        // The rate of change of the orthographic size in orthographic mode.
 
     private GameObject player;
 
     private Vector3 offset;
     private Quaternion rotation;
-    Camera camera;
+    Camera myCamera;
+
+    private Mass myMass;
+
+    Transform labelHolder;
+    TextMesh debugLabel;
 
     // Use this for initialization
-    void Start()
-    {
+    void Start(){
         player = this.transform.parent.gameObject;
         offset = transform.position - player.transform.position;
         rotation = transform.rotation;
-        camera = this.GetComponent<Camera>();
+        myCamera = this.GetComponent<Camera>();
+        myMass = player.GetComponent<Mass>();
+
+        labelHolder = player.transform.Find("LabelHolder");
+        debugLabel = labelHolder.Find("DebugLabel").GetComponent<TextMesh>();
     }
 
-    void LateUpdate()
-    {        
+    void LateUpdate(){        
         transform.rotation = rotation;
         updateCamera();
     }
 
-    public void updateCamera()
-    {        
+    public void updateCamera(){        
+
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
         transform.position = player.transform.position + offset;
+        debugLabel.text = "CMR " + currentMassRate();
         return;
 #else
 		
-
-         if (Input.touchCount == 2)
-        {
+         if (Input.touchCount == 2){
             // Store both touches.
             Touch touchZero = Input.GetTouch(0);
             Touch touchOne = Input.GetTouch(1);
@@ -59,12 +63,24 @@ public class PlayerCameraController : MonoBehaviour
             // If the camera is orthographic...
            
             // ... change the orthographic size based on the change in distance between the touches.
-            camera.orthographicSize += deltaMagnitudeDiff * orthoZoomSpeed;
 
-            // Make sure the orthographic size never drops below zero.
-            camera.orthographicSize = Mathf.Max(camera.orthographicSize, 0.1f);
-                        
+            float newOrthographicSize = myCamera.orthographicSize + deltaMagnitudeDiff * orthoZoomSpeed;
+            float massRate = currentMassRate();
+
+            newOrthographicSize = Mathf.Max(newOrthographicSize, 0.8f * massRate);
+            newOrthographicSize = Mathf.Min(newOrthographicSize, 20.0f * massRate);
+            myCamera.orthographicSize = newOrthographicSize;
+
+            debugLabel.text="OGS "+newOrthographicSize;
         }
 #endif
     }
+
+
+    private float currentMassRate(){
+        return 1.0f * myMass.currentMass / myMass.initMass;
+    }
+
+
+
 }

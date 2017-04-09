@@ -4,8 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System;
 
-public class SimpleTouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
-{
+public class SimpleTouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler{
 
     public float smoothing;
 
@@ -15,14 +14,12 @@ public class SimpleTouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     private bool touched;
     private int pointerID;
 
-    void Awake()
-    {
+    void Awake(){
         direction = Vector2.zero;
         touched = false;    
     }
 
-    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
-    {
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData){
         // Set our start point
         if (!touched)
         {
@@ -33,8 +30,7 @@ public class SimpleTouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHand
       
     }
 
-    void IDragHandler.OnDrag(PointerEventData eventData)
-    {
+    void IDragHandler.OnDrag(PointerEventData eventData){
         // compare the difference between our start point and current point
         if (eventData.pointerId == pointerID)
         {
@@ -47,8 +43,7 @@ public class SimpleTouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     }
 
 
-    void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
-    {
+    void IPointerUpHandler.OnPointerUp(PointerEventData eventData){
         //reset everything
         if(eventData.pointerId == pointerID)
         {
@@ -58,8 +53,7 @@ public class SimpleTouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHand
   
     }
 
-    public Vector2 GetDirection()
-    {
+    public Vector2 GetDirection(){
         smoothDirection = Vector2.MoveTowards(smoothDirection, direction, smoothing);
         return smoothDirection;
     }

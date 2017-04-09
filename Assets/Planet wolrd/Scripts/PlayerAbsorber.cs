@@ -2,8 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class PlayerAbsorber : NetworkBehaviour
-{
+public class PlayerAbsorber : NetworkBehaviour{
 
     private GameObject player;
     private Mass myMass;
@@ -14,18 +13,15 @@ public class PlayerAbsorber : NetworkBehaviour
     public int enemyCount = 0;
     private AudioSource[] audios;
 
-    void Start()
-    {        
+    void Start(){        
         player = this.gameObject;
         myMass = player.GetComponent<Mass>();
         massView = player.GetComponent<MassViewController>();
         audios = GetComponents<AudioSource>();
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Boundary")
-        {
+    void OnTriggerEnter(Collider other){
+        if (other.tag == "Boundary"){
             return;
         }     
 
@@ -35,8 +31,7 @@ public class PlayerAbsorber : NetworkBehaviour
         if (enemy == null || enemyMass == null)
             return;
 
-        if (myMass.currentMass > enemyMass.currentMass)
-        {
+        if (myMass.currentMass > enemyMass.currentMass){
             enemyList.Add(enemy);
             enemyCount = enemyList.Count;
 
@@ -46,12 +41,12 @@ public class PlayerAbsorber : NetworkBehaviour
             enemyView.StartShrink();
 
 #if UNITY_ANDROID
-            if (isLocalPlayer)
+            if (isLocalPlayer) { 
                 Handheld.Vibrate();
+            }
 #endif 
 
-            if (enemy.tag=="Player")
-            {
+            if (enemy.tag=="Player"){
                 RpcPlayWarning();
             }
                 
@@ -59,21 +54,18 @@ public class PlayerAbsorber : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcPlayWarning()
-    {
+    public void RpcPlayWarning(){
         //Debug.Log("IsAbsorbing " + massView.IsAbsorbing());        
         //if(!massView.IsAbsorbing())      
             audios[1].Play();
     }
 
-    void OnTriggerExit(Collider other)
-    {
+    void OnTriggerExit(Collider other){
 
         GameObject enemy = other.gameObject;
         Mass enemyMass = enemy.GetComponent<Mass>();
 
-        if (myMass.currentMass > enemyMass.currentMass)
-        {
+        if (myMass.currentMass > enemyMass.currentMass){
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
             enemyView.StopShrink();
             massView.StopAbsorb();
@@ -83,13 +75,11 @@ public class PlayerAbsorber : NetworkBehaviour
         enemyCount = enemyList.Count;
     }
 
-    public void checkEnemyList()
-    {
+    public void checkEnemyList(){
 
         ArrayList deadEnemy = new ArrayList();
         IEnumerator enumerator = enemyList.GetEnumerator();
-        while (enumerator.MoveNext())
-        {
+        while (enumerator.MoveNext()){
             GameObject enemy = (GameObject)enumerator.Current;
             if (enemy != null && enemy.GetComponent<Mass>().currentMass == 0)
             {
@@ -97,8 +87,7 @@ public class PlayerAbsorber : NetworkBehaviour
             }
         }
         IEnumerator deadEnumerator = deadEnemy.GetEnumerator();
-        while (deadEnumerator.MoveNext())
-        {
+        while (deadEnumerator.MoveNext()){
             GameObject enemy = (GameObject)deadEnumerator.Current;
             enemyList.Remove(enemy);
             if (enemy == null)
@@ -110,26 +99,21 @@ public class PlayerAbsorber : NetworkBehaviour
     }
 
     [Command]
-    public void CmdDestory(GameObject gameObj)
-    {
+    public void CmdDestory(GameObject gameObj){
         if (gameObj == null)
             return;
 
-        if (gameObj.tag == "Player")
-        {
+        if (gameObj.tag == "Player"){
             // gameObj.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
             RpcRespawn(gameObj);
             gameObj.GetComponent<MassViewController>().Reset();
-        }
-        else
-        {
+        }else{
             Destroy(gameObj);
         }
     }
 
     [ClientRpc]
-    void RpcRespawn(GameObject gameObj)
-    {        
+    void RpcRespawn(GameObject gameObj){        
         gameObj.GetComponent<PlayerMover>().Respawn();            
     }
 

@@ -3,8 +3,7 @@ using System.Collections;
 using UnityEngine.Networking;
 
 [System.Serializable]
-public class Boundary
-{
+public class Boundary{
     public float xMin, xMax, zMin, zMax;
 }
 
@@ -38,8 +37,7 @@ public class PlayerMover : NetworkBehaviour {
    
     private Mass myMass;
 
-    void Awake()
-    {
+    void Awake(){
         playerCam = GetComponentInChildren<Camera>();
         playerCam.gameObject.SetActive(false);
         labelHolder = transform.Find("LabelHolder");
@@ -49,16 +47,13 @@ public class PlayerMover : NetworkBehaviour {
 
     }
 
-    public void Respawn()
-    {
-        if (isLocalPlayer)
-        {
+    public void Respawn(){
+        if (isLocalPlayer){
             this.gameObject.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
         }
     }
 
-    void Start()
-    {
+    void Start(){
         this.gameObject.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
 
         //GetComponent<MeshRenderer>().material.color = playerColor;
@@ -69,27 +64,21 @@ public class PlayerMover : NetworkBehaviour {
     }
 
 
-    void FixedUpdate()
-    {
-        if (isLocalPlayer)
-        {			
+    void FixedUpdate(){
+        if (isLocalPlayer){			
             updateCurrentMovement();
         }
 
         rb.rotation = Quaternion.Euler(0.0f, rotateYVal, 0.0f);
-        if (rotateYVal == 0.01f)
-        {
+        if (rotateYVal == 0.01f){
             flame.SetActive(false);
-        }
-        else
-        {
+        }else{
             flame.SetActive(true);
         }
 
     }
 
-    void updateCurrentMovement()
-    {
+    void updateCurrentMovement(){
         Vector3 movement = getMovement();
 
         float massFactor = myMass.currentMass * 1.0f / myMass.initMass;
@@ -99,19 +88,16 @@ public class PlayerMover : NetworkBehaviour {
        // Debug.Log("myMass.currentMass" + myMass.currentMass + "   massFactor " + massFactor + " currentSpeed " + currentSpeed);
         rb.velocity = movement * currentSpeed;
 
-        rb.position = new Vector3
-        (
-            Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
-            0.0f,
-            Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
-        );
+        rb.position = new Vector3(  Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
+                                    0.0f,
+                                    Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
+                                    );
 
 
         updateFlame(movement);
     }
 
-    Vector3 getMovement()
-    {
+    Vector3 getMovement(){
       Vector3 movement = Vector3.zero;
 
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
@@ -120,26 +106,18 @@ public class PlayerMover : NetworkBehaviour {
       movement = new Vector3(moveHorizontal, 0, moveVertical);
 #else
 
-      if (Input.touchCount == 1)
-      {
+      if (Input.touchCount == 1){
           Touch myTouch = Input.touches[0];
-          if(myTouch.phase == TouchPhase.Began)
-          {
-              if (!touched)
-              {
+          if(myTouch.phase == TouchPhase.Began){
+              if (!touched){
                   touchOrigin = myTouch.position;
                   touched = true;
               }
-
-          }
-          else if (myTouch.phase == TouchPhase.Moved)
-          {
+          }else if (myTouch.phase == TouchPhase.Moved){
               Vector2 touchEnd = myTouch.position;
               Vector2 directionRaw = touchEnd - touchOrigin;
               direction = directionRaw.normalized;
-          }
-          else if(myTouch.phase == TouchPhase.Ended )
-          {
+          }else if(myTouch.phase == TouchPhase.Ended ){
               touched = false;
               direction = Vector2.zero;
           }
@@ -152,27 +130,18 @@ public class PlayerMover : NetworkBehaviour {
       return movement;
     }
 
-    void updateFlame(Vector3 movement)
-    {
+    void updateFlame(Vector3 movement){
         float rotateY = 0.0f;
-        if (movement.x == 0.0f && movement.z == 0.0f)
-        {
+        if (movement.x == 0.0f && movement.z == 0.0f){
             rotateY = 0.01f;
             flame.SetActive(false);
-        }
-        else
-        {
+        }else{
             flame.SetActive(true);
-            if (movement.x == 0.0f)
-            {
+            if (movement.x == 0.0f){
                 rotateY = (movement.z > 0) ? 0.0f : 180.0f;
-            }
-            else if (movement.z == 0.0f)
-            {
+            }else if (movement.z == 0.0f){
                 rotateY = (movement.x > 0) ? 90.0f : -90.0f;
-            }
-            else
-            {
+            }else{
                 rotateY = Mathf.Atan2(movement.z, -movement.x) * Mathf.Rad2Deg - 90;
                 if (rotateY < 0) rotateY += 360;
             }
@@ -182,20 +151,14 @@ public class PlayerMover : NetworkBehaviour {
     }
 
     [Command]
-    public void CmdUpdateRoateVal(float rotateY)
-    {
+    public void CmdUpdateRoateVal(float rotateY){
         this.rotateYVal = rotateY;
     }
 
 
-    public override void OnStartLocalPlayer()
-    {
+    public override void OnStartLocalPlayer(){
         playerCam.gameObject.SetActive(true);      
         
     }
-
-	
-
-
 
 }
