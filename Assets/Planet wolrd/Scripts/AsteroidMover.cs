@@ -1,25 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
+public class AsteroidMover : NetworkBehaviour{
 
-public class AsteroidMover : MonoBehaviour {
-
+    Rigidbody rb;
     public float speed;
-    public float tilt;
-    public Boundary boundary;
 
-    // Use this for initialization
-    void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-  void FixedUpdate()
-  {
-
-  }
+    void Start(){
+        rb = GetComponent<Rigidbody>();
+        rb.velocity = transform.forward * speed;
+    }
 }

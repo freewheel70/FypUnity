@@ -14,6 +14,6 @@ public class StartGame : MonoBehaviour {
 	}
 
 	public void EnterGame(){
-		Application.LoadLevel ("MainScene");
+		//Application.LoadLevel ("MainScene");
 	}
 }

@@ -5,8 +5,8 @@ public class PlayerCameraController : MonoBehaviour{
 
     private bool startMoveCamera = false;  
 
-    private float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
-    private float orthoZoomSpeed = 0.3f;        // The rate of change of the orthographic size in orthographic mode.
+    private float perspectiveZoomSpeed = 0.5f;  // The rate of change of the field of view in perspective mode.
+    private float orthoZoomSpeed = 0.3f;  // The rate of change of the orthographic size in orthographic mode.
 
     private GameObject player;
 
@@ -43,8 +43,7 @@ public class PlayerCameraController : MonoBehaviour{
         debugLabel.text = "CMR " + currentMassRate();
         return;
 #else
-		
-         if (Input.touchCount == 2){
+        if (Input.touchCount == 2){
             // Store both touches.
             Touch touchZero = Input.GetTouch(0);
             Touch touchOne = Input.GetTouch(1);
@@ -80,7 +79,5 @@ public class PlayerCameraController : MonoBehaviour{
     private float currentMassRate(){
         return 1.0f * myMass.currentMass / myMass.initMass;
     }
-
-
 
 }

@@ -119,10 +119,8 @@ public class MassViewController : NetworkBehaviour{
 
         while (shrinkTickets.Count > 0 && !isDead){
             isDead = (myMass.shrink(5 * shrinkTickets.Count) == 0);
-            if (isDead){                
-                GameObject explo = (GameObject)Instantiate(explosion, this.transform.position, Quaternion.identity);
-                NetworkServer.Spawn(explo);
-                RpcPlayExplosion(netId);
+            if (isDead){                                
+                PlayExplosionEffects();
                 break;
             }
 
@@ -150,4 +148,11 @@ public class MassViewController : NetworkBehaviour{
         player.transform.localScale = new Vector3(currentScale, currentScale, currentScale);        
     }
 
+    private void PlayExplosionEffects() {
+        GameObject explo = (GameObject)Instantiate(explosion, this.transform.position, Quaternion.identity);
+        NetworkServer.Spawn(explo);
+        RpcPlayExplosion(netId);       
+    }
+
+   
 }
