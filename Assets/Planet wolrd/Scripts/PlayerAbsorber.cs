@@ -7,17 +7,18 @@ public class PlayerAbsorber : NetworkBehaviour{
     private GameObject player;
     private Mass myMass;
     private MassViewController massView;
-
-    //public bool isAbsorbing = false;
+  
     ArrayList enemyList = new ArrayList();
     public int enemyCount = 0;
     private AudioSource[] audios;
+    private PlayerID myPlayerId;
 
     void Start(){        
         player = this.gameObject;
         myMass = player.GetComponent<Mass>();
         massView = player.GetComponent<MassViewController>();
         audios = GetComponents<AudioSource>();
+        myPlayerId = player.GetComponent<PlayerID>();
     }
 
     void OnTriggerEnter(Collider other){
@@ -38,26 +39,27 @@ public class PlayerAbsorber : NetworkBehaviour{
             massView.StartAbsorb();
 
             MassViewController enemyView = enemy.GetComponent<MassViewController>();
+            PlayerID enemyId = enemy.GetComponent<PlayerID>();
             enemyView.StartShrink();
+            if (enemy.tag == "Player"){
+                Debug.Log("Call RpcPlayWarning !");
+                RpcPlayWarning();
+            }
 
 #if UNITY_ANDROID
             if (isLocalPlayer) { 
                 Handheld.Vibrate();
             }
-#endif 
-
-            if (enemy.tag=="Player"){
-                RpcPlayWarning();
-            }
+#endif             
                 
         }
     }
 
     [ClientRpc]
-    public void RpcPlayWarning(){
-        //Debug.Log("IsAbsorbing " + massView.IsAbsorbing());        
-        //if(!massView.IsAbsorbing())      
-            audios[1].Play();
+    public void RpcPlayWarning(){               
+        if (!isLocalPlayer) {            
+            audios[0].Play();          
+        }
     }
 
     void OnTriggerExit(Collider other){
@@ -81,8 +83,7 @@ public class PlayerAbsorber : NetworkBehaviour{
         IEnumerator enumerator = enemyList.GetEnumerator();
         while (enumerator.MoveNext()){
             GameObject enemy = (GameObject)enumerator.Current;
-            if (enemy != null && enemy.GetComponent<Mass>().currentMass == 0)
-            {
+            if (enemy != null && enemy.GetComponent<Mass>().currentMass == 0){
                 deadEnemy.Add(enemy);
             }
         }
@@ -103,8 +104,7 @@ public class PlayerAbsorber : NetworkBehaviour{
         if (gameObj == null)
             return;
 
-        if (gameObj.tag == "Player"){
-            // gameObj.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+        if (gameObj.tag == "Player"){           
             RpcRespawn(gameObj);
             gameObj.GetComponent<MassViewController>().Reset();
         }else{

@@ -67,7 +67,7 @@ public class PlayerCameraController : MonoBehaviour{
             float massRate = currentMassRate();
 
             newOrthographicSize = Mathf.Max(newOrthographicSize, 0.8f * massRate);
-            newOrthographicSize = Mathf.Min(newOrthographicSize, 20.0f * massRate);
+            newOrthographicSize = Mathf.Min(newOrthographicSize, 25.0f * massRate);
             myCamera.orthographicSize = newOrthographicSize;
 
             debugLabel.text="OGS "+newOrthographicSize;

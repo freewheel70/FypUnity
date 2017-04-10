@@ -12,7 +12,7 @@ public class MassViewController : NetworkBehaviour{
     public GameObject explosion;
 
     private Mass myMass;
-    private GameObject player;   
+    private GameObject myGameObj;   
 
     private Queue absorbTickets = Queue.Synchronized(new Queue());
     private bool isAbsorbing = false;
@@ -20,8 +20,7 @@ public class MassViewController : NetworkBehaviour{
     private Queue shrinkTickets = Queue.Synchronized(new Queue());
     private bool isShrinking = false;
 
-    private bool isDead = false;
-    private AudioSource[] audios;
+    private bool isDead = false;   
 
 
     public void Reset(){
@@ -35,17 +34,11 @@ public class MassViewController : NetworkBehaviour{
         myMass.Reset();
     }
 
-    // Use this for initialization
     void Start () {
-        player = this.gameObject;
-        myMass = player.GetComponent<Mass>();
-        audios = GetComponents<AudioSource>();
+        myGameObj = this.gameObject;
+        myMass = myGameObj.GetComponent<Mass>();        
     }
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public void StartAbsorb(){
     
@@ -69,7 +62,7 @@ public class MassViewController : NetworkBehaviour{
             
             currentScale = newsacle;
 
-            PlayerAbsorber playerAbsorber = player.GetComponent<PlayerAbsorber>();
+            PlayerAbsorber playerAbsorber = myGameObj.GetComponent<PlayerAbsorber>();
             if (playerAbsorber != null){
                 playerAbsorber.checkEnemyList();
             }
@@ -92,26 +85,12 @@ public class MassViewController : NetworkBehaviour{
     }
 
     public void StartShrink(){
-  
-        //if (this.gameObject.tag == "Player")
-        //{
-        //    RpcPlayWarning(netId);
-        //}
-        shrinkTickets.Enqueue(new object());
 
+        shrinkTickets.Enqueue(new object());
         if (!isShrinking && shrinkTickets.Count <= 1 && !isDead){
             StartCoroutine(ShrinkMass());
         }        
                         
-    }
-
-
-
-    [ClientRpc]
-    public void RpcPlayExplosion(NetworkInstanceId id){
-        if (id.Equals(netId)) { 
-            audios[0].Play();
-        }
     }
 
     IEnumerator ShrinkMass(){
@@ -128,8 +107,8 @@ public class MassViewController : NetworkBehaviour{
 
             currentScale = newsacle;
 
-            Vector3 oldSpeed = player.GetComponent<Rigidbody>().velocity;
-            player.GetComponent<Rigidbody>().velocity = new Vector3(oldSpeed.x / 2, oldSpeed.y / 2, oldSpeed.z / 2);
+            Vector3 oldSpeed = myGameObj.GetComponent<Rigidbody>().velocity;
+            myGameObj.GetComponent<Rigidbody>().velocity = new Vector3(oldSpeed.x / 2, oldSpeed.y / 2, oldSpeed.z / 2);
 
             yield return new WaitForSeconds(absorbTimeGap);
         }
@@ -145,14 +124,26 @@ public class MassViewController : NetworkBehaviour{
     }
 
     public void updateScale(float currentScale){
-        player.transform.localScale = new Vector3(currentScale, currentScale, currentScale);        
+        myGameObj.transform.localScale = new Vector3(currentScale, currentScale, currentScale);        
     }
 
     private void PlayExplosionEffects() {
         GameObject explo = (GameObject)Instantiate(explosion, this.transform.position, Quaternion.identity);
-        NetworkServer.Spawn(explo);
-        RpcPlayExplosion(netId);       
+        NetworkServer.Spawn(explo);       
     }
 
-   
 }
+
+
+/**
+ * 
+ *  RpcPlayExplosion(netId);       
+   [ClientRpc]
+   public void RpcPlayExplosion(NetworkInstanceId id){
+       if (id.Equals(netId)) { 
+          //  audios[0].Play();
+        }
+   }
+    audios = GetComponents<AudioSource>();
+ * 
+ * */

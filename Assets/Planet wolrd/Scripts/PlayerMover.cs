@@ -16,35 +16,24 @@ public class PlayerMover : NetworkBehaviour {
     public float smoothing;
 
     [SyncVar]
-    public string playerName = "Player";
-
-    [SyncVar]
-    public Color playerColor = Color.white;
-
-    [SyncVar]
     public float rotateYVal = 0.01f;
 
     Camera playerCam;
-    Transform labelHolder;
-    TextMesh playerIDLabel;
-    TextMesh massLabel;
+
     Rigidbody rb;
     public GameObject flame;
     private Vector2 touchOrigin = -Vector2.one;
     private Vector2 smoothDirection;
     private Vector2 direction = Vector2.zero;
     private bool touched  = false;
-   
+
     private Mass myMass;
 
     void Awake(){
         playerCam = GetComponentInChildren<Camera>();
         playerCam.gameObject.SetActive(false);
-        labelHolder = transform.Find("LabelHolder");
-		playerIDLabel = labelHolder.Find("IDLabel").GetComponent<TextMesh>();
-        massLabel = labelHolder.Find("MassLabel").GetComponent<TextMesh>();
+       
         rb = GetComponent<Rigidbody>();
-
     }
 
     public void Respawn(){
@@ -55,11 +44,6 @@ public class PlayerMover : NetworkBehaviour {
 
     void Start(){
         this.gameObject.transform.position = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
-
-        //GetComponent<MeshRenderer>().material.color = playerColor;
-        playerIDLabel.color = playerColor;
-        massLabel.color = playerColor;
-        playerIDLabel.text = playerName;
         myMass = this.gameObject.GetComponent<Mass>();
     }
 
@@ -157,8 +141,7 @@ public class PlayerMover : NetworkBehaviour {
 
 
     public override void OnStartLocalPlayer(){
-        playerCam.gameObject.SetActive(true);      
-        
+        playerCam.gameObject.SetActive(true);              
     }
 
 }
