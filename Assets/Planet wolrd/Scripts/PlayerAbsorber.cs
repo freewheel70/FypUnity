@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using System;
 
-public class PlayerAbsorber : NetworkBehaviour{
+public class PlayerAbsorber : Absorber{
 
     private GameObject player;
     private Mass myMass;
     private MassViewController massView;
   
-    ArrayList enemyList = new ArrayList();
-    public int enemyCount = 0;
+    
     private AudioSource[] audios;
     private PlayerID myPlayerId;
 
@@ -21,38 +21,31 @@ public class PlayerAbsorber : NetworkBehaviour{
         myPlayerId = player.GetComponent<PlayerID>();
     }
 
-    void OnTriggerEnter(Collider other){
-        if (other.tag == "Boundary"){
-            return;
-        }     
+ 
+    protected override void growUpByOne()
+    {
+        massView.StartAbsorb();
+    }
 
-        GameObject enemy = other.gameObject;
-        Mass enemyMass = enemy.GetComponent<Mass>();
+    protected override bool shouldAbsorb(Mass victimMass)
+    {
+        return myMass.currentMass > victimMass.currentMass;
+    }
 
-        if (enemy == null || enemyMass == null)
-            return;
-
-        if (myMass.currentMass > enemyMass.currentMass){
-            enemyList.Add(enemy);
-            enemyCount = enemyList.Count;
-
-            massView.StartAbsorb();
-
-            MassViewController enemyView = enemy.GetComponent<MassViewController>();
-            PlayerID enemyId = enemy.GetComponent<PlayerID>();
-            enemyView.StartShrink();
-            if (enemy.tag == "Player"){
-                Debug.Log("Call RpcPlayWarning !");
-                RpcPlayWarning();
-            }
+    protected override void playEffects(GameObject victim)
+    {
+        if (victim.tag == "Player")
+        {
+            Debug.Log("Call RpcPlayWarning !");
+            RpcPlayWarning();
+        }
 
 #if UNITY_ANDROID
-            if (isLocalPlayer) { 
-                Handheld.Vibrate();
-            }
-#endif             
-                
+        if (isLocalPlayer)
+        {
+            Handheld.Vibrate();
         }
+#endif
     }
 
     [ClientRpc]
@@ -62,59 +55,13 @@ public class PlayerAbsorber : NetworkBehaviour{
         }
     }
 
-    void OnTriggerExit(Collider other){
 
-        GameObject enemy = other.gameObject;
-        Mass enemyMass = enemy.GetComponent<Mass>();
-
-        if (myMass.currentMass > enemyMass.currentMass){
-            MassViewController enemyView = enemy.GetComponent<MassViewController>();
-            enemyView.StopShrink();
-            massView.StopAbsorb();
-        }
-
-        enemyList.Remove(other.gameObject);
-        enemyCount = enemyList.Count;
+    protected override void stopGrowUpByOne(){
+        massView.StopAbsorb();
     }
 
-    public void checkEnemyList(){
-
-        ArrayList deadEnemy = new ArrayList();
-        IEnumerator enumerator = enemyList.GetEnumerator();
-        while (enumerator.MoveNext()){
-            GameObject enemy = (GameObject)enumerator.Current;
-            if (enemy != null && enemy.GetComponent<Mass>().currentMass == 0){
-                deadEnemy.Add(enemy);
-            }
-        }
-        IEnumerator deadEnumerator = deadEnemy.GetEnumerator();
-        while (deadEnumerator.MoveNext()){
-            GameObject enemy = (GameObject)deadEnumerator.Current;
-            enemyList.Remove(enemy);
-            if (enemy == null)
-                return;
-
-            massView.StopAbsorb();            
-            CmdDestory(enemy);
-        }
+    protected override bool shouldStopAbsorb(Mass victimMass){
+        return myMass.currentMass > victimMass.currentMass;
     }
-
-    [Command]
-    public void CmdDestory(GameObject gameObj){
-        if (gameObj == null)
-            return;
-
-        if (gameObj.tag == "Player"){           
-            RpcRespawn(gameObj);
-            gameObj.GetComponent<MassViewController>().Reset();
-        }else{
-            Destroy(gameObj);
-        }
-    }
-
-    [ClientRpc]
-    void RpcRespawn(GameObject gameObj){        
-        gameObj.GetComponent<PlayerMover>().Respawn();            
-    }
-
+       
 }

@@ -62,9 +62,10 @@ public class MassViewController : NetworkBehaviour{
             
             currentScale = newsacle;
 
-            PlayerAbsorber playerAbsorber = myGameObj.GetComponent<PlayerAbsorber>();
-            if (playerAbsorber != null){
-                playerAbsorber.checkEnemyList();
+            Absorber absorber = myGameObj.GetComponent<Absorber>();
+            if (absorber != null){
+                Debug.Log("To checkEnemyList");
+                absorber.checkEnemyList();
             }
             
             yield return new WaitForSeconds(absorbTimeGap);
