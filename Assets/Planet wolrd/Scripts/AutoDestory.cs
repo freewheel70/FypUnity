@@ -3,10 +3,8 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class AutoDestory : NetworkBehaviour{
-
-	// Use this for initialization
-	void Start () {
-       
+	
+	void Start () {       
         StartCoroutine(AutoClear(2, this.gameObject));
     }
 

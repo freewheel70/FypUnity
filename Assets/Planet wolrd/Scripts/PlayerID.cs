@@ -9,15 +9,14 @@ public class PlayerID : NetworkBehaviour{
 
     [SyncVar]
     public Color playerColor = Color.white;
-
-    Transform labelHolder;
+     
     TextMesh playerIDLabel;
     TextMesh massLabel;
 
     private Mass myMass;
 
     void Awake(){
-        labelHolder = transform.Find("LabelHolder");
+        Transform labelHolder = transform.Find("LabelHolder");
         massLabel = labelHolder.Find("MassLabel").GetComponent<TextMesh>();
         playerIDLabel = labelHolder.Find("IDLabel").GetComponent<TextMesh>();
     }

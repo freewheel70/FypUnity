@@ -56,7 +56,6 @@ public class Mass : NetworkBehaviour{
         }else{
             massLabel.text = " " + currentMass;            
         }
-
     }
 
 }
