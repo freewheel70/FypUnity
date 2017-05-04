@@ -25,8 +25,13 @@ public abstract class Absorber : NetworkBehaviour
         GameObject victim = other.gameObject;
         Mass enemyMass = victim.GetComponent<Mass>();
 
+
         if (victim == null || enemyMass == null)
+        {
+            Debug.Log("handleEnter victim == null " + (victim == null) + "  enemyMass == null " + (enemyMass == null));
             return;
+        }
+            
 
         if (shouldAbsorb(enemyMass))
         {
@@ -45,8 +50,9 @@ public abstract class Absorber : NetworkBehaviour
     protected abstract void playEffects(GameObject victim);
     protected abstract void growUpByOne();
     protected abstract bool shouldAbsorb(Mass victimMass);
+    protected abstract string getID();
 
-   
+
     protected void handlerExit(Collider other)
     {
         GameObject enemy = other.gameObject;
@@ -54,6 +60,7 @@ public abstract class Absorber : NetworkBehaviour
 
         if (shouldStopAbsorb(victimMass))
         {
+            Debug.Log("handlerExit " + getID());
             enemy.GetComponent<MassViewController>().StopShrink();
             
             stopGrowUpByOne();
@@ -97,10 +104,12 @@ public abstract class Absorber : NetworkBehaviour
     [Command]
     public void CmdDestory(GameObject gameObj)
     {
+        Debug.Log("CmdDestory "+gameObj.tag);
         if (gameObj == null)
             return;
 
         if (gameObj.tag == "Player"){
+            Debug.Log("CmdDestory Player to RpcRespawn");
             RpcRespawn(gameObj);
             gameObj.GetComponent<MassViewController>().Reset();
         }else{

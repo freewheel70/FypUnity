@@ -4,9 +4,12 @@ using System;
 
 public class BlackHoleAbsorber : Absorber
 {
+    private bool isAbsorbing = false;
+    private float absorbTimeGap = 0.5f;
 
     protected override bool shouldAbsorb(Mass victimMass)
     {
+        Debug.Log("BlackHoleAbsorber shouldAbsorb ! ");
         return true;
     }
 
@@ -17,7 +20,22 @@ public class BlackHoleAbsorber : Absorber
 
     protected override void growUpByOne()
     {
+        if(!isAbsorbing && victimCount > 0)
+        {
+            isAbsorbing = true;
+            StartCoroutine(AbsorbNearMass());
+        }
         return;//Not need to grow black hole
+    }
+
+    IEnumerator AbsorbNearMass()
+    {
+        while(isAbsorbing && victimCount > 0)
+        {
+            checkEnemyList();
+            yield return new WaitForSeconds(absorbTimeGap);
+        }
+        isAbsorbing = false;
     }
 
     protected override void stopGrowUpByOne()
@@ -28,5 +46,10 @@ public class BlackHoleAbsorber : Absorber
     protected override bool shouldStopAbsorb(Mass victimMass)
     {
         return true;
+    }
+
+    protected override string getID()
+    {
+        return "BlackHoleAbsorber";
     }
 }

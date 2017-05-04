@@ -29,7 +29,7 @@ public class PlayerAbsorber : Absorber{
 
     protected override bool shouldAbsorb(Mass victimMass)
     {
-        return myMass.currentMass > victimMass.currentMass;
+        return (victimMass==null)?false:myMass.currentMass > victimMass.currentMass;
     }
 
     protected override void playEffects(GameObject victim)
@@ -61,7 +61,11 @@ public class PlayerAbsorber : Absorber{
     }
 
     protected override bool shouldStopAbsorb(Mass victimMass){
-        return myMass.currentMass > victimMass.currentMass;
+        return (victimMass == null) ? false: myMass.currentMass > victimMass.currentMass;
     }
-       
+
+    protected override string getID()
+    {
+        return "PlayerAbsorber";
+    }
 }
