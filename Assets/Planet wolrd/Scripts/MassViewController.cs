@@ -20,8 +20,9 @@ public class MassViewController : NetworkBehaviour{
     private Queue shrinkTickets = Queue.Synchronized(new Queue());
     private bool isShrinking = false;
 
-    private bool isDead = false;   
+    private bool isDead = false;
 
+    private bool isSpeedUp = false;
 
     public void Reset(){
         currentScale = 1.0f;
@@ -124,6 +125,12 @@ public class MassViewController : NetworkBehaviour{
         }
     }
 
+    public void setScale(float scale)
+    {
+        currentScale = scale;
+        //myGameObj.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+    }
+
     public void updateScale(float currentScale){
         myGameObj.transform.localScale = new Vector3(currentScale, currentScale, currentScale);        
     }
@@ -131,6 +138,37 @@ public class MassViewController : NetworkBehaviour{
     private void PlayExplosionEffects() {
         GameObject explo = (GameObject)Instantiate(explosion, this.transform.position, Quaternion.identity);
         NetworkServer.Spawn(explo);       
+    }
+
+    public bool speedUp()
+    {
+        if (myMass.currentMass < 50){
+            isSpeedUp = false;
+            return false;
+        }else{
+            if (!isSpeedUp){
+                isSpeedUp = true;
+                StartCoroutine(SpeedUpLoseSize());
+            }
+            return true;
+        }
+    }
+
+    IEnumerator SpeedUpLoseSize()
+    {
+        while (isSpeedUp && myMass.currentMass >= 50)
+        {
+            myMass.grow(-5);
+            float newsacle = myMass.currentMass * 1.0f / myMass.initMass;
+            currentScale = newsacle;
+
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    public void stopSpeedUp()
+    {
+        isSpeedUp = false;
     }
 
 }

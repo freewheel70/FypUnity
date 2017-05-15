@@ -17,7 +17,7 @@ public class PlayerCameraController : MonoBehaviour{
     private Mass myMass;
 
     Transform labelHolder;
-    TextMesh debugLabel;
+   // TextMesh debugLabel;
 
     // Use this for initialization
     void Start(){
@@ -28,7 +28,7 @@ public class PlayerCameraController : MonoBehaviour{
         myMass = player.GetComponent<Mass>();
 
         labelHolder = player.transform.Find("LabelHolder");
-        debugLabel = labelHolder.Find("DebugLabel").GetComponent<TextMesh>();
+        //debugLabel = labelHolder.Find("DebugLabel").GetComponent<TextMesh>();
     }
 
     void LateUpdate(){        
@@ -40,7 +40,7 @@ public class PlayerCameraController : MonoBehaviour{
 
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
         transform.position = player.transform.position + offset;
-        debugLabel.text = "CMR " + currentMassRate();
+        //debugLabel.text = "CMR " + currentMassRate();
         return;
 #else
         if (Input.touchCount == 2){
@@ -70,7 +70,7 @@ public class PlayerCameraController : MonoBehaviour{
             newOrthographicSize = Mathf.Min(newOrthographicSize, 25.0f * massRate);
             myCamera.orthographicSize = newOrthographicSize;
 
-            debugLabel.text="OGS "+newOrthographicSize;
+           // debugLabel.text="OGS "+newOrthographicSize;
         }
 #endif
     }

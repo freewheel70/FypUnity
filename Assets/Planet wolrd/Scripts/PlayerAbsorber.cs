@@ -21,7 +21,15 @@ public class PlayerAbsorber : Absorber{
         myPlayerId = player.GetComponent<PlayerID>();
     }
 
- 
+    void OnTriggerEnter(Collider other){
+        if(other.tag== "blackhole"){
+            audios[0].Play();
+        }else{
+            handleEnter(other);
+        }        
+    }
+
+
     protected override void growUpByOne()
     {
         massView.StartAbsorb();

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using System;
 
 public class Mass : NetworkBehaviour{
 
-    TextMesh massLabel;
+    protected TextMesh massLabel;
 
     [SyncVar(hook = "updateMassLabel")]
     public int currentMass = 100;
@@ -22,14 +23,18 @@ public class Mass : NetworkBehaviour{
     void Start(){
         currentMass = initMass;
 
-        massLabel = transform.Find("LabelHolder").Find("MassLabel").GetComponent<TextMesh>();
+        initMassLabel(currentMass);
+        
+    }
 
-        updateMassLabel(currentMass);
+    protected virtual void initMassLabel(int currentMass)
+    {
+        throw new NotImplementedException();
     }
 
     public void grow(int amount){
-        if (!isServer)
-            return;
+       // if (!isServer)
+       //     return;
         currentMass += amount;
     }
 
@@ -50,7 +55,7 @@ public class Mass : NetworkBehaviour{
         return 1;
     }
 
-    private void updateMassLabel(int currentMass){
+    protected void updateMassLabel(int currentMass){
         if (massLabel == null){
 
         }else{
